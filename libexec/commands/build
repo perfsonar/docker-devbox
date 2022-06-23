@@ -1,0 +1,49 @@
+#!/bin/sh -e
+#
+# Build an image
+#
+# Usage:  build-container [ OPTIONS ] NAME
+#
+# Options:
+#    --if-new    Build only of the image doesn't exist yet
+#
+
+. "$(dirname $0)/../common"
+
+
+IF_NEW=false
+if [ "$1" = "--if-new" ]
+then
+    IF_NEW=true
+    shift
+fi
+
+if [ $# -ne 1 ]
+then
+    die "TODO: Usage"
+fi
+NAME="$1"
+
+BASE_IMAGE=$(getkey "${DDB_ETC}/bases" "${NAME}")
+
+CONTAINER_NAME="${DDB_CONTAINER_PREFIX}${NAME}"
+
+cp -r "${DDB}/prep" "${TMPBASE}"
+
+USER_PREP="${HOME}/.ddb/prep.m4"
+if [ -r "${USER_PREP}" ]
+then
+    cp "${USER_PREP}" "${TMPBASE}/prep/prep-steps-user.m4"
+fi 
+
+DOCKERFILE="${TMPBASE}/Dockerfile"
+
+cat > "${DOCKERFILE}" <<EOF
+FROM ${BASE_IMAGE}
+RUN mkdir -p "${DDB_DIR}"
+COPY prep "${DDB_DIR}"
+RUN "${DDB_DIR}/prep"
+EOF
+
+cd "${TMPBASE}"
+$DOCKER build -t "${CONTAINER_NAME}" -f "${DOCKERFILE}" .

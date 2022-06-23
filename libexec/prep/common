@@ -1,0 +1,80 @@
+#
+# Common functions for system prep
+#
+
+# -----------------------------------------------------------------------------
+
+# This is adapted from Unibuild
+
+MACRO_OS=$(uname -s)
+
+# This page has some useful information about figuring out what
+# distribution you're running:
+# http://linuxmafia.com/faq/Admin/release-files.html
+
+if [ -e '/etc/redhat-release' ]; then
+
+    MACRO_FAMILY=RedHat
+    MACRO_PACKAGING=rpm
+    # Lsb_release vanished in EL9.  Do this stuff the hard way.
+    MACRO_DISTRO=$(source /etc/os-release && echo $ID)
+    MACRO_RELEASE=$(sed -e 's/^.*release\s\+//i; s/\s.*$//' /etc/redhat-release)
+    MACRO_CODENAME=$(sed -e 's/^.*[(]\([^)]\+\)[)].*$/\1/' /etc/redhat-release)
+
+elif [ -e '/etc/debian_version' ]; then
+
+    MACRO_FAMILY=Debian
+    MACRO_PACKAGING=deb
+    MACRO_DISTRO=$(lsb_release --id --short)
+    MACRO_RELEASE=$(lsb_release --release --short)
+    MACRO_CODENAME=$(lsb_release --codename --short)
+
+else
+
+    die "DDB is not supported on this OS family."
+
+fi
+
+MACRO_MAJOR=$(echo "${MACRO_RELEASE}" | cut -d . -f 1)
+MACRO_MINOR=$(echo "${MACRO_RELEASE}" | cut -d . -f 2)
+MACRO_PATCH=$(echo "${MACRO_RELEASE}" | cut -d . -f 3)
+MACRO_ARCH=$(uname -m)
+
+# -----------------------------------------------------------------------------
+
+#
+# Figure out what does installs on this system
+#
+
+if [ "${MACRO_FAMILY}" = "RedHat" ]
+then
+
+    case "${MACRO_MAJOR}" in
+	7)
+	    install_pkg()
+	    {
+		yum -y install "$@"
+	    }
+	    ;;
+	*)
+	    install_pkg()
+	    {
+		dnf -y install "$@"
+	    }
+	    ;;
+    esac
+
+elif [ "${MACRO_FAMILY}" = "Debian" ]
+then
+
+    install_pkg()
+    {
+	apt install -y "$@"
+    }
+
+else
+
+    echo "${MACRO_FAMILY} is not supported." 1>&2
+    exit 1
+
+fi

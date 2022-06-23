@@ -1,0 +1,26 @@
+#
+# Base Boxes for DDB
+#
+
+default	almalinux:9
+
+# Generic
+
+el7	centos:7
+el8	almalinux:8
+el9	almalinux:9
+
+d10	debian:10
+d11	debian:11
+
+u18	ubuntu:18
+u20	ubuntu:20
+
+
+
+# perfSONAR Unibuild
+
+el7u	ghcr.io/perfsonar/unibuild/centos7:latest
+el8u	ghcr.io/perfsonar/unibuild/alma8:latest
+el9u	ghcr.io/perfsonar/unibuild/alma9:latest
+d10u	ghcr.io/perfsonar/unibuild/debian10:latest

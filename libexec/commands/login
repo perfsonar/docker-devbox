@@ -1,0 +1,10 @@
+#!/bin/sh -e
+#
+# Log into a DDB container
+#
+
+. "$(dirname $0)/../common"
+
+CONTAINER_NAME="${DDB_CONTAINER_PREFIX}$1"
+
+exec $DOCKER exec -it "${CONTAINER_NAME}" su - $(id -nu)

@@ -1,0 +1,65 @@
+#!/bin/sh -e
+#
+# unibuild - Front-end CLI program for Unibuild
+#
+
+WHOAMI=$(basename $0)
+WHEREAMI=$(dirname $0)
+
+DDB_CANONICAL=$(readlink -e "$0")
+export DDB=$(dirname "${DDB_CANONICAL}")
+
+. "${DDB}/common"
+
+help()
+{
+    cat <<EOF
+Usage: ${WHOAMI} COMMAND [ ARGUMENTS ]"
+
+Commands:  (Use 'COMMAND --help' for further help.)"
+
+EOF
+    ls "${DDB_COMMANDS}" \
+        | fgrep -x -v -e xyzzy \
+	| pr -4 -T -t \
+	| sed -e 's/^/    /g'
+    echo
+}
+
+
+# Handle options
+
+while echo "$1" | egrep -q -e '^--'
+do
+    OPTION=$1
+    shift
+
+    case "${OPTION}" in
+    
+	--help|-h|help)
+	    help
+	    exit 0
+	    ;;
+
+	--*)
+	    die "Unknown option ${OPTION}.  Use --help for help."
+	    ;;
+    esac
+done
+
+if [ $# -lt 1 ]
+then
+    help
+    exit 0
+else
+    COMMAND="$1"
+    shift
+fi
+
+
+RUN="${DDB_COMMANDS}/${COMMAND}"
+
+[ -x "${RUN}" ] \
+    || die "${COMMAND}: Unknown command.  Use --help for help."
+
+exec "${RUN}" "$@"

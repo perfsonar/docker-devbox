@@ -1,0 +1,44 @@
+#!/bin/sh -e
+
+#
+# Stop a container
+#
+
+. "$(dirname $0)/../common"
+
+STOP_LIST="${TMPBASE}/stoplist"
+touch "${STOP_LIST}"
+
+if [ "$1" == "--all" ]
+then
+    ALL=true
+    shift
+    $DOCKER container list  --format "{{.Names}}|{{.Names}}\n" --all --filter "name=^${DDB_CONTAINER_PREFIX}" \
+	| sed -e "s/^${DDB_CONTAINER_PREFIX}//" \
+	      > "${STOP_LIST}"
+else
+    ALL=false
+    for ARG in "$@"
+    do
+	printf "${ARG}|${DDB_CONTAINER_PREFIX}${ARG}\n" >> "${STOP_LIST}"
+    done
+fi
+
+for STOP in $(cat "${STOP_LIST}")
+do
+    NAME=$(echo "${STOP}" | cut -d '|' -f 1)
+    CONTAINER=$(echo "${STOP}" | cut -d '|' -f 2)
+
+    if $ALL
+    then
+	printf  "Stopping ${NAME}..."
+    fi
+    # TODO: Make sure the container exists
+    $DOCKER exec -it "${CONTAINER}" "${DDB_DIR}/stop"
+    if $ALL
+    then
+	echo " Done."
+    fi
+
+
+done
