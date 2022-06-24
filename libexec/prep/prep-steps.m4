@@ -1,8 +1,6 @@
 #!/bin/sh
 #
-# Development system preparation.
-#
-# Process with 'unibuild m4 --prefix __'.
+# Docker Development Box preparation.
 #
 
 set -e
@@ -71,5 +69,6 @@ install_pkg \
     make
 
 ifelse(__FAMILY,Debian,
-       sed -i -e 's/^\s*#\s*(deb-src\s+.*)$/\1/' /etc/apt/sources.list
+       sed -i -e 's/^\s*#\s*\(deb-src\s+.*\)$/\1/' /etc/apt/sources.list
+       apt-get update
       )

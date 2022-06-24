@@ -25,9 +25,12 @@ elif [ -e '/etc/debian_version' ]; then
 
     MACRO_FAMILY=Debian
     MACRO_PACKAGING=deb
-    MACRO_DISTRO=$(lsb_release --id --short)
-    MACRO_RELEASE=$(lsb_release --release --short)
-    MACRO_CODENAME=$(lsb_release --codename --short)
+    MACRO_DISTRO=$(awk -F= '$1 == "NAME" { print $2 }' /etc/os-release \
+			| tr -d '"')
+    MACRO_RELEASE=$(awk -F= '$1 == "VERSION_ID" { print $2 }' /etc/os-release \
+			| tr -d '"')
+    MACRO_CODENAME=$(awk -F= '$1 == "VERSION" { print $2 }' /etc/os-release \
+			 | sed -e 's/^.*[(]\(.*\)[)].*$/\1/')
 
 else
 
@@ -64,12 +67,24 @@ then
 	    ;;
     esac
 
+    # YUM and DNF do this as needed.
+    update_package_manager()
+    {
+	true
+    }
+
+
 elif [ "${MACRO_FAMILY}" = "Debian" ]
 then
 
     install_pkg()
     {
-	apt install -y "$@"
+	apt-get install -y "$@"
+    }
+
+    update_package_manager()
+    {
+	apt-get update
     }
 
 else

@@ -4,6 +4,9 @@ WHEREAMI=$(dirname $0)
 
 . "${WHEREAMI}/common"
 
+update_package_manager
+
+# Required for ddb_m4 to work
 install_pkg m4
 
 cd "${WHEREAMI}"
