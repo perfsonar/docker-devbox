@@ -4,21 +4,22 @@
 
 default	almalinux:9
 
-# Generic
+# Generic Red Hat
 
+centos	centos:7
 el7	centos:7
 el8	almalinux:8
 el9	almalinux:9
 
+# Generic Debian
+
 d10	debian:10
 d11	debian:11
+u18	ubuntu:18.04
+u20	ubuntu:20.04
 
-u18	ubuntu:18
-u20	ubuntu:20
-
-
-
-# perfSONAR Unibuild
+# perfSONAR basic images with Unibuild pre-installed
+# TODO: Change when renaming PR is merged.
 
 el7u	ghcr.io/perfsonar/unibuild/centos7:latest
 el8u	ghcr.io/perfsonar/unibuild/alma8:latest

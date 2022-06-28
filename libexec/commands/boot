@@ -6,6 +6,13 @@
 
 . "$(dirname $0)/../common"
 
+LOGIN_AFTER=false
+if [ "$1" = "--login" ]
+then
+    LOGIN_AFTER=true
+    shift
+fi
+
 NAME="$1"
 CONTAINER_NAME="${DDB_CONTAINER_PREFIX}${NAME}"
 
@@ -13,13 +20,12 @@ CONTAINER_NAME="${DDB_CONTAINER_PREFIX}${NAME}"
 
 IMAGE="$2"
 IMAGE_FULL="${DDB_CONTAINER_PREFIX}$2"
-# TODO: Check for presence
-
-USER_ENT=$(getent passwd $(id -nu))
-USER_HOME=$(echo "${USER_ENT}" | cut -d : -f 6)
 
 # TODO: Make this work
 #${WHEREAMI}/build --if-new "${BASE}"
+
+USER_ENT=$(getent passwd $(id -nu))
+USER_HOME=$(echo "${USER_ENT}" | cut -d : -f 6)
 
 echo "Starting ${NAME} as ${IMAGE}"
 
@@ -32,3 +38,8 @@ $DOCKER run \
     --volume "${USER_HOME}:${USER_HOME}" \
     "${IMAGE_FULL}:latest" \
     bash /ddb-entrypoint --user-ent "${USER_ENT}"
+
+if ${LOGIN_AFTER}
+then
+    exec "${WHEREAMI}/login" "${NAME}"
+fi

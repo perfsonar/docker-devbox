@@ -13,7 +13,6 @@ set -e
 #
 
 
-
 ifelse(__FAMILY/eval(__MAJOR >= 8),RedHat/1,
 
        # Some minimal builds of EL8+ install microdnf but not dnf.  Bootstrap
@@ -41,7 +40,14 @@ ifelse(__FAMILY/eval(__MAJOR >= 8),RedHat/1,
 
 ifelse(__FAMILY/__MAJOR,RedHat/8,dnf config-manager --set-enabled powertools)
 ifelse(__FAMILY/__MAJOR,RedHat/9,dnf config-manager --set-enabled crb)
-ifelse(__FAMILY,RedHat,dnf update -y)
+ifelse(__FAMILY/__MAJOR,RedHat/7,yum update -y)
+ifelse(__FAMILY/eval(__MAJOR >= 8),RedHat/1,dnf update -y)
+
+ifelse(__FAMILY,Debian,
+       sed -i -e 's/^\s*#\s*\(deb-src\s+.*\)$/\1/' /etc/apt/sources.list
+       apt-get update
+      )
+
 
 install_pkg \
     procps \
@@ -54,21 +60,12 @@ install_pkg \
 
 install_pkg systemd
 
+# Some Debian variants don't include this by default.
+ifelse(__FAMILY,Debian,
+       install_pkg systemd-sysv
+      )
+
 cp ddb-entrypoint.target /etc/systemd/system/ddb-entrypoint.target
 cp ddb-entrypoint.service /etc/systemd/system/ddb-entrypoint.service
 cp ddb-entrypoint /
 chmod +x /ddb-entrypoint
-
-
-#
-# Useful utilities
-#
-
-install_pkg \
-    git \
-    make
-
-ifelse(__FAMILY,Debian,
-       sed -i -e 's/^\s*#\s*\(deb-src\s+.*\)$/\1/' /etc/apt/sources.list
-       apt-get update
-      )

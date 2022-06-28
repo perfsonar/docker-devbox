@@ -1,0 +1,15 @@
+#!/bin/sh -e
+
+cat <<EOF
+export PATH="$(readlink -f $(dirname $0))/libexec:${PATH}"
+EOF
+
+if [ "$1" = "--aliases" ]
+then
+    cat <<EOF
+alias ddbb="ddb boot"
+alias ddbbl="ddb boot --login"
+alias ddbh="ddb halt"
+alias ddbl="ddb login"
+EOF
+fi
