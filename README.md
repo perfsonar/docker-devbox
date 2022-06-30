@@ -2,7 +2,7 @@
 
 Docker-Devbox (DDB) is a set of utilities that allow easy setup, login
 and teardown of Docker containers, much in the vein of Vagrant.  In
-addition, it provides per-user container customization and shares the
+addition, it provides per-user container customization, systemd and shares the
 invoking user's account and home directory into the containers for a
 consistent user experience.
 
