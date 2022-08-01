@@ -19,9 +19,10 @@ u18	ubuntu:18.04
 u20	ubuntu:20.04
 
 # perfSONAR basic images with Unibuild pre-installed
-# TODO: Change when renaming PR is merged.
 
-el7u	ghcr.io/perfsonar/unibuild/centos7:latest
-el8u	ghcr.io/perfsonar/unibuild/alma8:latest
-el9u	ghcr.io/perfsonar/unibuild/alma9:latest
-d10u	ghcr.io/perfsonar/unibuild/debian10:latest
+el7u	ghcr.io/perfsonar/unibuild/el7:latest
+el8u	ghcr.io/perfsonar/unibuild/el:latest
+el9u	ghcr.io/perfsonar/unibuild/el9:latest
+d10u	ghcr.io/perfsonar/unibuild/d10:latest
+u18u	ghcr.io/perfsonar/unibuild/u18:latest
+u20u	ghcr.io/perfsonar/unibuild/u20:latest
