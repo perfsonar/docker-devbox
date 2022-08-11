@@ -2,7 +2,7 @@
 
 Docker-Devbox (DDB) is a set of utilities that allow easy setup, login
 and teardown of Docker containers, much in the vein of Vagrant.  In
-addition, it provides per-user container customization and shares the
+addition, it provides per-user container customization, systemd and shares the
 invoking user's account and home directory into the containers for a
 consistent user experience.
 
@@ -111,7 +111,8 @@ users on the same system to have their own customized containers.
 
 ### `boot NAME IMAGE` - Start a container
 
-Once an image has been built, it can be instantiated as a container by 
+Once an image has been built, it can be instantiated as a container by
+booting it.
 
 Example:
 ```
@@ -119,6 +120,10 @@ Example:
 
 [yourlogin@host ~]$
 ```
+
+Aliases:
+  * `ddbb` = `ddb boot`
+  * `ddbbl` = `ddb boot --login`
 
 **NOTE:** The actual name of the Docker container will be
 `ddb__USERNAME__NAME`, where `USERNAME` is the invoking user's login
@@ -147,6 +152,9 @@ Example:
 
 [yourlogin@host ~]$
 ```
+
+Aliases:
+  * `ddbl` = `ddb login`
 
 
 ## `ps` - Show a list of running containers.
@@ -181,6 +189,8 @@ Powering off.
 [yourlogin@host ~]$
 ```
 
+Aliases:
+  * `ddbh` = `ddb halt`
 
 
 ## Everything Else
