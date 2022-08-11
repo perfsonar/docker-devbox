@@ -65,8 +65,7 @@ fi
 
 # Run it.
 
-SYSTEMD_ARGS="--show-status=false --unit=ddb-entrypoint.target"
-echo "$0: starting $SYSTEMD $SYSTEMD_ARGS"
-exec $SYSTEMD $SYSTEMD_ARGS
+echo "$0: starting $SYSTEMD"
+exec $SYSTEMD
 
 # When systemd exits, the container will be destroyed.
