@@ -1,9 +1,11 @@
 #!/bin/sh -e
 
-, $(dirname $0)/libexec/common
+DDB=$(dirname $0)
+. $(dirname $0)/libexec/common
+
 
 cat <<EOF
-export PATH="$(shreadlink $(dirname $0))/libexec:${PATH}"
+export PATH="${DDB}/libexec:${PATH}"
 EOF
 
 if [ "$1" = "--aliases" ]

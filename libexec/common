@@ -18,6 +18,52 @@ die()
 
 [ -d "${DDB}" ] || die "Can't find DDB directory."
 
+
+# A low-budget, shell-based readlink because MacOS doesn't have it.
+shreadlink()
+{
+    FILE=$1
+
+    while true
+    do
+        if [ ! -L "${FILE}" ]
+        then
+            break
+        fi
+        LS_LINK=$(ls -dl "${FILE}" | sed -e 's/^.*-> //')
+        if echo ${LS_LINK} | egrep -q -e '^/'
+        then
+            # Absolute path
+            FILE="${LS_LINK}"
+        else
+            # Path relative to this directory
+            DIR=$(dirname "${FILE}")
+            FILE="${DIR}/${LS_LINK}"
+        fi
+    done
+
+    # Ajust for the first part of the path being absolute or relative
+    case "${FILE}" in
+	.|..)
+	    FILE=$(cd "${FILE}" && pwd)
+	    ;;
+	./*|../*)
+	    REL_PART=$(echo "${FILE}" | cut -d / -f 1)
+	    # REST_PART will have a slash built in.
+	    REL_PWD=$(cd "${REL_PART}" && pwd | sed -e 's|^/$||')
+	    REST_PART=$(echo "${FILE}" | cut -d / -f 2-)
+	    FILE="${REL_PWD}/${REST_PART}"
+	    ;;
+    esac
+
+    echo "${FILE}"
+}
+
+
+# Canonicalize DDB
+DDB=$(shreadlink "${DDB}")
+
+
 DDB_ETC="${DDB}/../etc"
 
 # Since these get run as root, the names need to be unique by user.
@@ -59,29 +105,6 @@ getkey()
 
 
 
-# A low-budget, shell-based readlink because MacOS doesn't have it.
-shreadlink()
-{
-    FILE=$1
-    while true
-    do
-        if [ ! -L "${FILE}" ]
-        then
-            echo "${FILE}"
-            break
-        fi
-        LS_LINK=$(ls -dl "${FILE}" | sed -e 's/^.*-> //')
-        if echo ${LS_LINK} | egrep -q -e '^/'
-        then
-            # Absolute path
-            FILE="${LS_LINK}"
-        else
-            # Path relative to this directory
-            DIR=$(dirname "${FILE}")
-            FILE="${DIR}/${LS_LINK}"
-        fi
-    done
-}
 
 
 
