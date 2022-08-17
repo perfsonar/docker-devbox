@@ -30,11 +30,11 @@ should work on any operating system that can provide the following:
  * functioning instance of Docker or Podman with the latter configured
  * to behave like Docker (i.e., it responds to `docker` commands).
 
- * An account that is the superuser or can become the superuser via
-   `sudo(8)`.  For low-friction operation, it is recommended that
-   `sudo` be configured to allow repeated use after providing a
-   password or invocation of Docker (usually `/bin/docker`) without
-   requiring a password.
+ * In environments other than macOS, an account that is the superuser
+   or can become the superuser via `sudo(8)`.  For low-friction
+   operation, it is recommended that `sudo` be configured to allow
+   repeated use after providing a password or invocation of Docker
+   (usually `/bin/docker`) without requiring a password.
 
 ### Installation
 

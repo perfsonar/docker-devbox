@@ -77,8 +77,8 @@ export DDB_COMMANDS="${DDB}/commands"
 
 TMPBASE=$(mktemp -d)
 
-
-if [ "$(id -u)" = 0 ]
+# Root and macOS don't need sudo
+if [ "$(uname -s)" = "Darwin" -o "$(id -u)" = 0 ]
 then
     DOCKER="docker"
 else
