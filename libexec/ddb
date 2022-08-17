@@ -6,10 +6,13 @@
 WHOAMI=$(basename $0)
 WHEREAMI=$(dirname $0)
 
-DDB_CANONICAL=$(readlink -e "$0")
+# Temporary while we load common
+DDB=${WHEREAMI}
+. "${WHEREAMI}/common"
+
+DDB_CANONICAL=$(shreadlink "$0")
 export DDB=$(dirname "${DDB_CANONICAL}")
 
-. "${DDB}/common"
 
 help()
 {

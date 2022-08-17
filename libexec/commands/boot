@@ -24,7 +24,23 @@ IMAGE_FULL="${DDB_CONTAINER_PREFIX}$2"
 # TODO: Make this work
 #${WHEREAMI}/build --if-new "${BASE}"
 
-USER_ENT=$(getent passwd $(id -nu))
+
+# Get the password entry in the standard POSIX format of
+# login:password:uid:gid:gecos:homedir:shell
+
+case "$(uname -s)" in
+    Darwin)
+	# MacOS doesn't have getent, so cook up the equivalent.
+	USER_ENT=$(dscacheutil -q user -a name $(id -nu) \
+		       | sed -e 's/^[^ ]*: //' \
+		       | tr '\n' ':' \
+		       | cut -d ':' -f 1,2,3,4,7,5,6)
+	;;
+    *)
+	# Anything else is assumed POSIX
+	USER_ENT=$(getent passwd $(id -nu))
+esac
+
 USER_HOME=$(echo "${USER_ENT}" | cut -d : -f 6)
 
 echo "Starting ${NAME} as ${IMAGE}"

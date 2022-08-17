@@ -58,6 +58,34 @@ getkey()
 
 
 
+
+# A low-budget, shell-based readlink because MacOS doesn't have it.
+shreadlink()
+{
+    FILE=$1
+    while true
+    do
+        if [ ! -L "${FILE}" ]
+        then
+            echo "${FILE}"
+            break
+        fi
+        LS_LINK=$(ls -dl "${FILE}" | sed -e 's/^.*-> //')
+        if echo ${LS_LINK} | egrep -q -e '^/'
+        then
+            # Absolute path
+            FILE="${LS_LINK}"
+        else
+            # Path relative to this directory
+            DIR=$(dirname "${FILE}")
+            FILE="${DIR}/${LS_LINK}"
+        fi
+    done
+}
+
+
+
+
 #
 # CLEANUP ON EXIT
 #
