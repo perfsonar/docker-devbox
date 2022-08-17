@@ -58,6 +58,12 @@ install_pkg \
 # Systemd
 #
 
+# This solves a permissions problem that existed before U20.  See
+# https://stackoverflow.com/questions/25193161.
+ifelse(__DISTRO/eval(__MAJOR < 20),Ubuntu/1,
+       ln -s -f /bin/true /usr/bin/chfn
+      )
+
 install_pkg systemd
 
 # Some Debian variants don't include this by default.
