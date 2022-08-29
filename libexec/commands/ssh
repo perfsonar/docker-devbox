@@ -1,0 +1,6 @@
+#!/bin/sh -e
+#
+# Alias for login
+#
+
+exec "$(dirname $0)/login" "$@"
