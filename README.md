@@ -28,7 +28,7 @@ should work on any operating system that can provide the following:
  * A POSIX-compliant shell and standard utilities, including `m4`.
 
  * functioning instance of Docker or Podman with the latter configured
- * to behave like Docker (i.e., it responds to `docker` commands).
+   to behave like Docker (i.e., it responds to `docker` commands).
 
  * An account that is the superuser or can become the superuser via
    `sudo(8)`.  For low-friction operation, it is recommended that
