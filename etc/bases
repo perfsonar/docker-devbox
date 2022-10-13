@@ -21,7 +21,7 @@ u20	ubuntu:20.04
 # perfSONAR basic images with Unibuild pre-installed
 
 el7u	ghcr.io/perfsonar/unibuild/el7:latest
-el8u	ghcr.io/perfsonar/unibuild/el:latest
+el8u	ghcr.io/perfsonar/unibuild/el8:latest
 el9u	ghcr.io/perfsonar/unibuild/el9:latest
 d10u	ghcr.io/perfsonar/unibuild/d10:latest
 u18u	ghcr.io/perfsonar/unibuild/u18:latest
