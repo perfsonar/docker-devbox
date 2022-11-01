@@ -1,7 +1,7 @@
 #!/bin/sh -e
 
 cat <<EOF
-export PATH="$(readlink -f $(dirname $0))/libexec:${PATH}"
+export PATH="$(cd $(dirname $0) && pwd)/libexec:${PATH}"
 EOF
 
 if [ "$1" = "--aliases" ]

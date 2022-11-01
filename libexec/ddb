@@ -6,8 +6,7 @@
 WHOAMI=$(basename $0)
 WHEREAMI=$(dirname $0)
 
-DDB_CANONICAL=$(readlink -e "$0")
-export DDB=$(dirname "${DDB_CANONICAL}")
+export DDB="$(cd $(dirname $0) && pwd)"
 
 . "${DDB}/common"
 
