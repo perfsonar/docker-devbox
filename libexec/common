@@ -57,6 +57,27 @@ getkey()
 }
 
 
+# Get a password entry by name in a portable way
+# Args:
+#  1 - User name
+getent_passwd()
+{
+    case "$(uname -s)" in
+
+        Darwin)
+            dscacheutil -q user -a name "$1" \
+                | sed -e 's/^[^ ]*: //' \
+                | tr '\n' ':' \
+                | cut -d ':' -f 1,2,3,4,7,5,6
+            ;;
+
+        *)
+            getent passwd "$1"
+            ;;
+
+    esac
+}
+
 
 #
 # CLEANUP ON EXIT

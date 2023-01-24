@@ -24,7 +24,7 @@ IMAGE_FULL="${DDB_CONTAINER_PREFIX}$2"
 # TODO: Make this work
 #${WHEREAMI}/build --if-new "${BASE}"
 
-USER_ENT=$(getent passwd $(id -nu))
+USER_ENT=$(getent_passwd $(id -nu))
 USER_HOME=$(echo "${USER_ENT}" | cut -d : -f 6)
 
 echo "Starting ${NAME} as ${IMAGE}"
