@@ -39,7 +39,7 @@ then
     echo "${USER_NAME} ALL= (ALL) NOPASSWD:ALL" > "/etc/sudoers.d/${USER_NAME}"
     chmod 440 "/etc/sudoers.d/${USER_NAME}"
 
-    echo "Added user account ${USER_NAME} (${USER_GECOS}) at %{USER_HOME}"
+    echo "Added user account ${USER_NAME} (${USER_GECOS}) at ${USER_HOME}"
 fi
 
 systemctl mask systemd-firstboot.service systemd-udevd.service systemd-modules-load.service
