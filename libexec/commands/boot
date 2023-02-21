@@ -29,8 +29,13 @@ USER_HOME=$(echo "${USER_ENT}" | cut -d : -f 6)
 
 echo "Starting ${NAME} as ${IMAGE}"
 
-# A note about this: Docker on macOS uses a Linux VM internally, so
-# the sharing of the cgroup volume is portable.
+# Notes:
+#
+# Docker on macOS uses a Linux VM internally, so the sharing of the
+# cgroup volume is portable.
+#
+# For info on use of the security-opt switch, see
+# https://jaosorior.dev/2018/selinux-and-docker-notes.
 
 $DOCKER run \
     --hostname "${NAME}" \
@@ -41,6 +46,7 @@ $DOCKER run \
     --tmpfs /run \
     --volume /sys/fs/cgroup:/sys/fs/cgroup:ro \
     --volume "${USER_HOME}:${USER_HOME}" \
+    --security-opt label:disable \
     "${IMAGE_FULL}:latest" \
     bash /ddb-entrypoint --user-ent "${USER_ENT}"
 
