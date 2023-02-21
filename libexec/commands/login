@@ -5,6 +5,14 @@
 
 . "$(dirname $0)/../common"
 
+if [ "$1" = "--root" ]
+then
+    COMMAND=bash
+    shift
+else
+    COMMAND="su - $(id -nu)"
+fi
+
 CONTAINER_NAME="${DDB_CONTAINER_PREFIX}$1"
 
-exec $DOCKER exec -it "${CONTAINER_NAME}" su - $(id -nu)
+exec $DOCKER exec -it "${CONTAINER_NAME}" ${COMMAND}
