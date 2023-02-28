@@ -7,11 +7,20 @@
 . "$(dirname $0)/../common"
 
 LOGIN_AFTER=false
-if [ "$1" = "--login" ]
-then
-    LOGIN_AFTER=true
-    shift
-fi
+while echo "$1" | egrep -qe '^--'
+do
+    case "$1" in
+	--login)
+	    LOGIN_AFTER=true
+	    shift
+	    ;;
+
+	--verbose)
+	    VERBOSE=true
+	    shift
+	    ;;
+    esac
+done
 
 NAME="$1"
 CONTAINER_NAME="${DDB_CONTAINER_PREFIX}${NAME}"
@@ -37,7 +46,18 @@ echo "Starting ${NAME} as ${IMAGE}"
 # For info on use of the security-opt switch, see
 # https://jaosorior.dev/2018/selinux-and-docker-notes.
 
-$DOCKER run \
+do_docker()
+{
+    if ${VERBOSE}
+    then
+	echo "Starting container ${CONTAINER_NAME}:"
+	echo "$@"
+    fi
+
+    "$@"
+}
+
+do_docker $DOCKER run \
     --hostname "${NAME}" \
     --name "${CONTAINER_NAME}" \
     --detach \
