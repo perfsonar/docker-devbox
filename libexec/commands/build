@@ -10,17 +10,26 @@
 
 . "$(dirname $0)/../common"
 
+help()
+{
+    cat <<EOF
+Usage: ${WHOAMI} IMAGE-NAME
 
-IF_NEW=false
-if [ "$1" = "--if-new" ]
+Example:  ${WHOAMI} el9
+EOF
+}
+
+
+if [ "$1" = "--help" ]
 then
-    IF_NEW=true
-    shift
+    help
+    exit 0
 fi
 
 if [ $# -ne 1 ]
 then
-    die "TODO: Usage"
+    help
+    exit 1
 fi
 NAME="$1"
 

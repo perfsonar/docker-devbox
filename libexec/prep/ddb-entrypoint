@@ -26,20 +26,43 @@ then
     USER_HOME=$(echo "${USER_ENT}" | cut -d : -f 6)
     USER_SHELL=$(echo "${USER_ENT}" | cut -d : -f 7)
 
-    groupadd -g "${USER_GID}" "${USER_NAME}"
-    useradd \
-	-u "${USER_UID}" \
-	-g "${USER_GID}" \
-	-c "${USER_GECOS}" \
-	-d "${USER_HOME}" --no-create-home \
-	-s "${USER_SHELL}" \
-	"${USER_NAME}"
+    if getent group "${USER_GID}" > /dev/null
+    then
+	OLD_GROUP=$(getent group "${USER_GID}" | cut -d : -f 1)
+	groupmod --new-name "${USER_NAME}" "${OLD_GROUP}"
+	echo "Modified existing '${OLD_GROUP}' group to '${USER_NAME}'."
+    else
+	groupadd -g "${USER_GID}" "${USER_NAME}"
+	echo "Added new group '${USER_NAME}'."
+    fi
+
+    if getent passwd "${USER_UID}" > /dev/null
+    then
+	OLD_USER=$(getent passwd "${USER_UID}" | cut -d : -f 1)
+	# TODO: This could have bad side effects if the account is
+	# already doing something.
+	usermod \
+	    --comment "${USER_GECOS}" \
+	    --home-dir "${USER_HOME}" \
+	    --gid "${USER_GID}" \
+	    --login "${USER_NAME}" \
+	    --shell "${USER_SHELL}" \
+	    "${OLD_USER}"
+	echo "Modified existing '${OLD_USER}' account to '${USER_NAME}'."
+    else
+	useradd \
+	    -u "${USER_UID}" \
+	    -g "${USER_GID}" \
+	    -c "${USER_GECOS}" \
+	    -d "${USER_HOME}" --no-create-home \
+	    -s "${USER_SHELL}" \
+	    "${USER_NAME}"
+	    echo "Added user account ${USER_NAME} (${USER_GECOS}) at ${USER_HOME}"
+    fi
 
     # Give the account frictionless sudo
     echo "${USER_NAME} ALL= (ALL) NOPASSWD:ALL" > "/etc/sudoers.d/${USER_NAME}"
     chmod 440 "/etc/sudoers.d/${USER_NAME}"
-
-    echo "Added user account ${USER_NAME} (${USER_GECOS}) at ${USER_HOME}"
 fi
 
 systemctl mask systemd-firstboot.service systemd-udevd.service systemd-modules-load.service
