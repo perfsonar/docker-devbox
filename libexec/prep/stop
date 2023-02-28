@@ -3,4 +3,4 @@
 # Shut down a container from the inside
 #
 
-poweroff -f
+poweroff
