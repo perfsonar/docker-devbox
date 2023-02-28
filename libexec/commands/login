@@ -5,11 +5,44 @@
 
 . "$(dirname $0)/../common"
 
-if [ "$1" = "--root" ]
+help()
+{
+    cat <<EOF
+Usage: ${WHOAMI} [ OPTIONS ] CONTAINER-NAME
+
+Options:
+  --root     Log in as root instead of $(id -nu)
+
+Example:  ${WHOAMI} --root thing
+EOF
+}
+
+
+ROOT=false
+while echo "$1" | egrep -qe '^--'
+do
+    case "$1" in
+	--help)
+	    help
+	    exit 0
+	    ;;
+	
+	--root)
+	    ROOT=true
+	    shift
+	    ;;
+	
+	*)
+	    echo "Unknown option $1" 1>&2
+	    exit 1
+    esac
+done
+
+
+if $ROOT
 then
     COMMAND=bash
-    shift
-else
+lse
     COMMAND="su - $(id -nu)"
 fi
 

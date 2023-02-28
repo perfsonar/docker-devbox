@@ -6,10 +6,30 @@
 
 . "$(dirname $0)/../common"
 
+help()
+{
+    cat <<EOF
+Usage: ${WHOAMI} [ OPTIONS ] CONTAINER-NAME IMAGE-NAME
+
+Options:
+  --login    Loginto the container after it has booted
+  --verbose  Print the Docker command used to start the container
+
+Example:  ${WHOAMI} --login thing el9
+EOF
+}
+
+
 LOGIN_AFTER=false
+VERBOSE=false
 while echo "$1" | egrep -qe '^--'
 do
     case "$1" in
+	--help)
+	    help
+	    exit 0
+	    ;;
+	
 	--login)
 	    LOGIN_AFTER=true
 	    shift
@@ -28,6 +48,7 @@ done
 
 NAME="$1"
 CONTAINER_NAME="${DDB_CONTAINER_PREFIX}${NAME}"
+# TODO: Check that CONTAINER_NAME exists
 
 # TODO: Check for duplicate container
 
