@@ -46,7 +46,7 @@ touch "${STOP_LIST}"
 if ${STOP_ALL}
 then
     $DOCKER container list  --format "{{.Names}}|{{.Names}}\n" --all --filter "name=^${DDB_CONTAINER_PREFIX}" \
-	| sed -e "s/^${DDB_CONTAINER_PREFIX}//" \
+	| sed -e '/^$/d' -e "s/^${DDB_CONTAINER_PREFIX}//" \
 	      > "${STOP_LIST}"
 else
     for ARG in "$@"
@@ -55,7 +55,7 @@ else
     done
 fi
 
-if [ $(wc -l "${STOP_LIST}" | cut -d ' ' -f 1) -eq 0 -a "${STOP_ALL}" = "false" ]
+if [ $(wc -l "${STOP_LIST}" | awk -F ' ' '{print $1}') -eq 0 -a "${STOP_ALL}" = "false" ]
 then
     help
     exit 1
