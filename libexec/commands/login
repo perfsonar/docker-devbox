@@ -42,7 +42,7 @@ done
 if $ROOT
 then
     COMMAND=bash
-lse
+else
     COMMAND="su - $(id -nu)"
 fi
 
