@@ -82,14 +82,25 @@ do_docker()
     "$@"
 }
 
+
+case $(uname -s) in
+    Darwin)
+	PRIVILEGED=--privileged
+    ;;
+    *)
+	VOLUME_CGROUP="--volume /sys/fs/cgroup:/sys/fs/cgroup:ro"
+    ;;
+esac
+
 do_docker $DOCKER run \
     --hostname "${NAME}" \
     --name "${CONTAINER_NAME}" \
     --detach \
     --rm \
+    ${PRIVILEGED} \
     --tmpfs /tmp \
     --tmpfs /run \
-    --volume /sys/fs/cgroup:/sys/fs/cgroup:ro \
+    ${VOLUME_CGROUP} \
     --volume "${USER_HOME}:${USER_HOME}" \
     --security-opt label:disable \
     "${IMAGE_FULL}:latest" \
