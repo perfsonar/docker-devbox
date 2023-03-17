@@ -86,9 +86,19 @@ do_docker()
 case $(uname -s) in
     Darwin)
 	PRIVILEGED=--privileged
-    ;;
+	;;
+    Linux)
+	if [ -e /sys/fs/cgroup/cgroup.controllers ]
+	then
+	    # CGROUPS v2
+	    PRIVILEGED=--privileged
+	else
+	    # CGROUPS v1
+	    VOLUME_CGROUP="--volume /sys/fs/cgroup:/sys/fs/cgroup:ro"
+	fi
+	;;
     *)
-	VOLUME_CGROUP="--volume /sys/fs/cgroup:/sys/fs/cgroup:ro"
+	die "Don't know how to support this OS."
     ;;
 esac
 
