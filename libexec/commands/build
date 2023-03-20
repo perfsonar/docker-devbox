@@ -55,4 +55,4 @@ RUN "${DDB_DIR}/prep"
 EOF
 
 cd "${TMPBASE}"
-$DOCKER build -t "${CONTAINER_NAME}" -f "${DOCKERFILE}" .
+$DOCKER build --pull -t "${CONTAINER_NAME}" -f "${DOCKERFILE}" .
