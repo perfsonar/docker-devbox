@@ -17,6 +17,7 @@ d10	debian:10
 d11	debian:11
 u18	ubuntu:18.04
 u20	ubuntu:20.04
+u22	ubuntu:22.04
 
 # perfSONAR basic images with Unibuild pre-installed
 
