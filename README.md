@@ -44,11 +44,11 @@ Clone this repository into a conventient place, such as
 In your shell's `rc` (note that only Bourne-like, POSIX shells are
 supported), add the following:
 
-```eval $(/opt/docker/devbox/setup) ```
+```eval $(/opt/docker-devbox/setup) ```
 
 To add convenience aliases (described below):
 
-```eval $(/opt/docker/devbox/setup --aliases)```
+```eval $(/opt/docker-devbox/setup --aliases)```
 
 
 ## Commands
