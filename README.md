@@ -38,7 +38,7 @@ should work on any operating system that can provide the following:
 
 ### Installation
 
-Clone this repository into a conventient place, such as
+Clone this repository into a convenient place, such as
 `/opt/docker-devbox`, which will be used in subsequent examples.
 
 In your shell's `rc` (note that only Bourne-like, POSIX shells are
@@ -49,6 +49,31 @@ supported), add the following:
 To add convenience aliases (described below):
 
 ```eval $(/opt/docker-devbox/setup --aliases)```
+
+
+## Quick Start
+
+```
+# Set up Docker DevBox
+you@host$ eval $(/opt/docker-devbox/setup --aliases)
+
+# Build a customized-for-you image of EL7 plus Unibuild
+you@host$ ddb build el7u
+
+# Start that image in a container
+you@host$ ddb boot tester el7u
+Starting tester as el7u
+f245ebc74207b5485a80602e4b676bd98443cdba2bb11cb8310ac7331eba555a
+
+# Log into the container and do your business
+you@host$ ddb login tester
+
+you@tester$ ...do things...
+you@tester$ exit
+
+# Destroy the container
+you@host$ ddb halt tester
+```
 
 
 ## Commands
