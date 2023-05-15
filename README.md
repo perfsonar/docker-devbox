@@ -98,16 +98,16 @@ for making decisions about what to do:
 
 | Macro | Description | Example |
 |-------|-------------|---------|
-| `OS` | Operating system as reported by `uname(1)` | `Linux` |
-| `DISTRO` | Operating system distribution, empty of not applicable | `CentOS` |
-| `FAMILY` | Operating system family, empty where not applicable | `RedHat` |
-| `RELEASE` | Operating system release | `7.9.2009` |
-| `CODENAME` | Codename of operating system release | `Core` |
-| `MAJOR` | Major version of `RELEASE`, empty if not present | `7` |
-| `MINOR` | Minor version of `RELEASE`, empty if not present | `9` |
-| `PATCH` | Patch version of `RELEASE`, empty if not present | `2009` |
-| `PACKAGING` | Type of packaging used by this system (Currently `deb` or `rpm`) | `rpm` |
-| `ARCH` | Machine architecture as reported by `uname(1)` | `x86_64` |
+| `__OS` | Operating system as reported by `uname(1)` | `Linux` |
+| `__DISTRO` | Operating system distribution, empty of not applicable | `CentOS` |
+| `__FAMILY` | Operating system family, empty where not applicable | `RedHat` |
+| `__RELEASE` | Operating system release | `7.9.2009` |
+| `__CODENAME` | Codename of operating system release | `Core` |
+| `__MAJOR` | Major version of `RELEASE`, empty if not present | `7` |
+| `__MINOR` | Minor version of `RELEASE`, empty if not present | `9` |
+| `__PATCH` | Patch version of `RELEASE`, empty if not present | `2009` |
+| `__PACKAGING` | Type of packaging used by this system (Currently `deb` or `rpm`) | `rpm` |
+| `__ARCH` | Machine architecture as reported by `uname(1)` | `x86_64` |
 
 A sample of this file can be found in
 `/opt/docker-devbox/etc/prep-example.m4`.
@@ -132,6 +132,27 @@ Successfully tagged localhost/ddb__yourlogin__el8:latest
 and `BASE` is the shorthand for the base image provided when `build`
 was invoked (e.g., `ddb__steveb__el8`).  This allows for multiple
 users on the same system to have their own customized containers.
+
+
+#### User-Supplied Macros
+
+Additional macros may be supplied to the build process two ways:
+
+On the command line, one or more instances of `--define MACRO=VALUE`
+may be used when invoking `build`, e.g.:
+```
+ddb build --define FOO=bar --define BAZ=quux
+```
+
+In the bases file (`etc/bases`), macros can be defined after the name
+of the base image, e.g.:
+```
+nine-plus almalinux:9 FOO=bar BAZ=quux
+```
+
+**Note:** All user-defined macros are, like those provided by
+Unibuild, prefixed with a double underscore to prevent them from
+colliding with useful words (e.g., `FOO` will become `__FOO`).
 
 
 ### `boot NAME IMAGE` - Start a container

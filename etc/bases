@@ -1,6 +1,16 @@
 #
 # Base Boxes for DDB
 #
+# Format is NAME BASE-IMAGE [ MACROS ]
+#
+# Where:
+#   NAME is the name of the image to build
+#   BASE-IMAGE is the name of the starting point image
+#   MACROS is a list of macros in MACRO=VALUE format.
+#
+# Note that the macros cannot contain whitespace other than to
+# separate macros and no forms of quoting are supported.
+#
 
 default	almalinux:9
 

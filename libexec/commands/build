@@ -1,39 +1,65 @@
 #!/bin/sh -e
 #
 # Build an image
+#BEGIN-HELP
 #
-# Usage:  build-container [ OPTIONS ] NAME
+# Usage:  build [ OPTIONS ] NAME
 #
 # Options:
-#    --if-new    Build only of the image doesn't exist yet
+#    --define MACRO=VALUE  Define macro 'MACRO' as 'VALUE' for prep files
+#    --if-new              Build only of the image doesn't exist yet
 #
+#END-HELP
 
 . "$(dirname $0)/../common"
 
-help()
-{
-    cat <<EOF
-Usage: ${WHOAMI} IMAGE-NAME
+EXTRA_MACROS="${TMPBASE}/extra-macros"
+touch "${EXTRA_MACROS}"
 
-Example:  ${WHOAMI} el9
-EOF
+add_extra_macro()
+{
+    MACRO=$(echo "$1" | sed -e 's/=.*$//')
+    VALUE=$(echo "$1" | sed -e 's/^[^=]\+=//')
+    echo "${MACRO}" | egrep -q -e '^[A-Za-z0-9_]+$' \
+	|| die "${MACRO}: Invalid macro name."
+    echo "export 'MACRO_${MACRO}=${VALUE}'" >> "${EXTRA_MACROS}"
 }
 
+while echo "$1" | egrep -qe '^--'
+do
+    case "$1" in
+	--help)
+	    self_help
+	    ;;
+	
+	--define)
+	    shift
+	    add_extra_macro "$1"
+	    shift
+	    ;;
 
-if [ "$1" = "--help" ]
-then
-    help
-    exit 0
-fi
+	*)
+	    echo "Unknown option $1" 1>&2
+	    exit 1
+    esac
+done
 
-if [ $# -ne 1 ]
-then
-    help
-    exit 1
-fi
+[ $# -ne 1 ] && self_help 1
+
 NAME="$1"
 
-BASE_IMAGE=$(getkey "${DDB_ETC}/bases" "${NAME}")
+BASE_IMAGE=$(getkey "${DDB_ETC}/bases" "${NAME}" | cut -d ' ' -f 1)
+
+# Add any macros specified in the bases file
+getkey "${DDB_ETC}/bases" "${NAME}" \
+    | cut -d ' ' -f 2- \
+    | tr " "  "\n" \
+    | (
+    while read MACRO
+    do
+	add_extra_macro "${MACRO}"
+    done
+)
 
 CONTAINER_NAME="${DDB_CONTAINER_PREFIX}${NAME}"
 
@@ -51,6 +77,7 @@ cat > "${DOCKERFILE}" <<EOF
 FROM ${BASE_IMAGE}
 RUN mkdir -p "${DDB_DIR}"
 COPY prep "${DDB_DIR}"
+COPY "extra-macros" "${DDB_DIR}"
 RUN "${DDB_DIR}/prep"
 EOF
 

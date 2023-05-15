@@ -7,6 +7,7 @@ set -e
 
 . "$(dirname $0)/common"
 
+echo MACRO IS __FOO
 
 #
 # Essentials
