@@ -52,7 +52,7 @@ BASE_IMAGE=$(get_by_key "${DDB_ETC}/bases" "${NAME}" | cut -d ' ' -f 1)
 
 # Add any macros specified in the bases file
 get_by_key "${DDB_ETC}/bases" "${NAME}" \
-    | cut -d ' ' -f 2- \
+    | cut -d ' ' -s -f 2- \
     | tr " "  "\n" \
     | (
     while read MACRO
