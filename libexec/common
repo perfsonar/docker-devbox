@@ -49,7 +49,7 @@ fi
     
 # Strip comments and blanks out of key/value file $1 and find the
 # value out of columns 2+.
-getkey()
+get_by_key()
 {
     VALUE=$(sed -e 's/^\s*#.*$//g; /^$/d' "$1" \
 		| awk -v "KEY=$2" '$1 == KEY { for(i=2; i<=NF; i++) { printf("%s",( (i>2) ? OFS : "" ) $i) } ; }')

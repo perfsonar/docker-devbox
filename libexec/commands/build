@@ -48,10 +48,10 @@ done
 
 NAME="$1"
 
-BASE_IMAGE=$(getkey "${DDB_ETC}/bases" "${NAME}" | cut -d ' ' -f 1)
+BASE_IMAGE=$(get_by_key "${DDB_ETC}/bases" "${NAME}" | cut -d ' ' -f 1)
 
 # Add any macros specified in the bases file
-getkey "${DDB_ETC}/bases" "${NAME}" \
+get_by_key "${DDB_ETC}/bases" "${NAME}" \
     | cut -d ' ' -f 2- \
     | tr " "  "\n" \
     | (
