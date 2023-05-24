@@ -11,6 +11,11 @@ install_pkg m4
 
 cd "${WHEREAMI}"
 
+if [ -e './extra-macros' ]
+then
+    . ./extra-macros
+fi
+
 for PREP in prep-steps prep-steps-user
 do
     M4FILE="${PREP}.m4"
@@ -18,7 +23,7 @@ do
     then
 	continue
     fi
-    
+
     ./ddb_m4 < "${M4FILE}" > "${PREP}"
     chmod +x "${PREP}"
     printf "\nExecuting ${PREP}\n\n"

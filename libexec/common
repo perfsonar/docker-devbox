@@ -16,6 +16,13 @@ die()
     exit 1
 }
 
+self_help()
+{
+    sed -e '1,/^#BEGIN-HELP/d ; /^#END-HELP/,$d ; s/^#\s\{0,1\}//' "$0"
+    exit ${1:-0}
+}
+	
+
 [ -d "${DDB}" ] || die "Can't find DDB directory."
 
 DDB_ETC="${DDB}/../etc"
@@ -41,11 +48,11 @@ fi
 
     
 # Strip comments and blanks out of key/value file $1 and find the
-# value for key #2.
-getkey()
+# value out of columns 2+.
+get_by_key()
 {
     VALUE=$(sed -e 's/^\s*#.*$//g; /^$/d' "$1" \
-		| awk -v "KEY=$2" '$1 == KEY { print $2; exit 0 }')
+		| awk -v "KEY=$2" '$1 == KEY { for(i=2; i<=NF; i++) { printf("%s",( (i>2) ? OFS : "" ) $i) } ; }')
     
     if [ -z "${VALUE}" ]
     then

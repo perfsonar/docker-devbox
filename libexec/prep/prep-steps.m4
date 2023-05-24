@@ -7,7 +7,6 @@ set -e
 
 . "$(dirname $0)/common"
 
-
 #
 # Essentials
 #
