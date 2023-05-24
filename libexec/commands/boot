@@ -94,6 +94,7 @@ case $(uname -s) in
 	    PRIVILEGED=--privileged
 	else
 	    # CGROUPS v1
+	    PRIVILEGED=--privileged
 	    VOLUME_CGROUP="--volume /sys/fs/cgroup:/sys/fs/cgroup:ro"
 	fi
 	;;
