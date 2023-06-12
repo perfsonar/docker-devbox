@@ -15,6 +15,8 @@ el9	almalinux:9
 
 d10	debian:10
 d11	debian:11
+# TODO: Adjust this to debian:12 once GitHub has that.
+d12	debian:bookworm
 u18	ubuntu:18.04
 u20	ubuntu:20.04
 u22	ubuntu:22.04
@@ -25,5 +27,6 @@ el7u	ghcr.io/perfsonar/unibuild/el7:latest
 el8u	ghcr.io/perfsonar/unibuild/el8:latest
 el9u	ghcr.io/perfsonar/unibuild/el9:latest
 d10u	ghcr.io/perfsonar/unibuild/d10:latest
+d12u	ghcr.io/perfsonar/unibuild/d12:latest
 u18u	ghcr.io/perfsonar/unibuild/u18:latest
 u20u	ghcr.io/perfsonar/unibuild/u20:latest
