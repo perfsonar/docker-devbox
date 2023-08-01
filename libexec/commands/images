@@ -1,0 +1,10 @@
+#!/bin/sh -e
+
+#
+# Dump a list of built images
+#
+
+. "$(dirname $0)/../common"
+
+$DOCKER image ls --format '{{ .Repository }}' \
+    | sed -e "s|^.*/||g; /${DDB_CONTAINER_PREFIX}/!d; s/^ddb__[^_]*__//g"
