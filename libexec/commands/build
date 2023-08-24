@@ -79,6 +79,7 @@ RUN mkdir -p "${DDB_DIR}"
 COPY prep "${DDB_DIR}"
 COPY "extra-macros" "${DDB_DIR}"
 RUN "${DDB_DIR}/prep"
+RUN echo "${CONTAINER_NAME}" > "${CONTAINER_NAME}"
 EOF
 
 cd "${TMPBASE}"
