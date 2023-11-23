@@ -41,3 +41,8 @@ d12u	ghcr.io/perfsonar/unibuild/d12:latest
 u18u	ghcr.io/perfsonar/unibuild/u18:latest
 u20u	ghcr.io/perfsonar/unibuild/u20:latest
 u22u	ghcr.io/perfsonar/unibuild/u22:latest
+# Some foreign architecture images, they need to have full sha256 identifier
+d11uarm64 ghcr.io/perfsonar/unibuild/d11:latest@sha256:7b2fcc86008c8c1d2b89703872f2756bcd2f651726256f2777afb88418689f3a
+d11uarmhf ghcr.io/perfsonar/unibuild/d11:latest@sha256:d8cbb03c5bd8f88a01abd032725fa3c25e5593ddd7d1664e3f63e44021e5f0d7
+d11uppc64 ghcr.io/perfsonar/unibuild/d11:latest@sha256:c712efe4b949cc1f5952a54231cb9ed3bbced94daf82cac6ea49a10b8021cfb0
+
