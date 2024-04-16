@@ -42,7 +42,10 @@ u18u	ghcr.io/perfsonar/unibuild/u18:latest
 u20u	ghcr.io/perfsonar/unibuild/u20:latest
 u22u	ghcr.io/perfsonar/unibuild/u22:latest
 # Some foreign architecture images, they need to have full sha256 identifier
-d11uarm64 ghcr.io/perfsonar/unibuild/d11:latest@sha256:7b2fcc86008c8c1d2b89703872f2756bcd2f651726256f2777afb88418689f3a
-d11uarmhf ghcr.io/perfsonar/unibuild/d11:latest@sha256:d8cbb03c5bd8f88a01abd032725fa3c25e5593ddd7d1664e3f63e44021e5f0d7
-d11uppc64 ghcr.io/perfsonar/unibuild/d11:latest@sha256:c712efe4b949cc1f5952a54231cb9ed3bbced94daf82cac6ea49a10b8021cfb0
+u20uarm64 ghcr.io/perfsonar/unibuild/u20:latest@sha256:133c971b61856ae36d98573c583e8bc3f2ab6f7d4cd5e9d9d40582e5b8d10bed
+u20uarmhf ghcr.io/perfsonar/unibuild/u20:latest@sha256:8a50900de792a0ed9f1f56c33f66fcbd654daedd09b4cbd6b7462069e8854ccb
+u20uppc64 ghcr.io/perfsonar/unibuild/u20:latest@sha256:3fc81962025cda5b1096cc422bc5d08005d1fc276e6a6cecd873cfdb4f93a376
+d11uarm64 ghcr.io/perfsonar/unibuild/d11:latest@sha256:cfec0dfef4b1f2e661907889124a2209578f4907353318044ae6867668aad68e
+d11uarmhf ghcr.io/perfsonar/unibuild/d11:latest@sha256:659d5d9b66c46e785ae6485f8096965d1b20322dccc4612ddaa30ee14d35541c
+d11uppc64 ghcr.io/perfsonar/unibuild/d11:latest@sha256:7011afa3ccc18a9c061fd5b25cb74010a35288d3372097e07acea9407a22a610
 
