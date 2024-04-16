@@ -19,6 +19,7 @@ default	almalinux:9
 centos	centos:7
 el7	centos:7
 el8	almalinux:8
+ol8	oraclelinux:8
 el9	almalinux:9
 
 # Generic Debian
@@ -34,6 +35,7 @@ u22	ubuntu:22.04
 
 el7u	ghcr.io/perfsonar/unibuild/el7:latest
 el8u	ghcr.io/perfsonar/unibuild/el8:latest
+ol8u	ghcr.io/perfsonar/unibuild/ol8:latest
 el9u	ghcr.io/perfsonar/unibuild/el9:latest
 d10u	ghcr.io/perfsonar/unibuild/d10:latest
 d11u	ghcr.io/perfsonar/unibuild/d11:latest
