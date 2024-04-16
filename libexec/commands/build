@@ -83,4 +83,4 @@ RUN echo "${CONTAINER_NAME}" > "${CONTAINER_NAME}"
 EOF
 
 cd "${TMPBASE}"
-$DOCKER build --pull -t "${CONTAINER_NAME}" -f "${DOCKERFILE}" .
+$DOCKER buildx build --pull -t "${CONTAINER_NAME}" -f "${DOCKERFILE}" .
