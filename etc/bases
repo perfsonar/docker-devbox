@@ -30,6 +30,7 @@ d12	debian:12
 u18	ubuntu:18.04
 u20	ubuntu:20.04
 u22	ubuntu:22.04
+u24	ubuntu:24.04
 
 # perfSONAR basic images with Unibuild pre-installed
 
@@ -43,3 +44,4 @@ d12u	ghcr.io/perfsonar/unibuild/d12:latest
 u18u	ghcr.io/perfsonar/unibuild/u18:latest
 u20u	ghcr.io/perfsonar/unibuild/u20:latest
 u22u	ghcr.io/perfsonar/unibuild/u22:latest
+u24u	ghcr.io/perfsonar/unibuild/u24:latest
