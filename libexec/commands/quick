@@ -44,7 +44,7 @@ do
     TRIES=$((${TRIES} + 1))
     [ "${TRIES}" -ge 10 ] && die "Unable to find a unique container name."
 
-    CANDIDATE=$(mktemp --dry-run quick-XXXXXXXX)
+    CANDIDATE=$(mktemp --dry-run "${IMAGE}-XXXXXXXX")
     if ! "${WHEREAMI}/ps" | fgrep -qx "${CANDIDATE}"
     then
 	CONTAINER="${CANDIDATE}"
