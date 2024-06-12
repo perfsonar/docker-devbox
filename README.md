@@ -217,6 +217,24 @@ issue-1234
 ```
 
 
+### `quick IMAGE` - Run an itinerant container
+
+This command boots a container based on `IMAGE`, logs into it and then
+destroys it once the login session has exited.
+
+Example:
+```
+[yourlogin@host ~]$ ddb quick el9u
+Starting quick-GQTXmh6T from image el9u
+b6067fd9d973c17b83c1ced2a8519d6ea40140eb15a438145c35be46f9707fc1
+[yourlogin@quick-GQTXmh6T]$
+[yourlogin@quick-GQTXmh6T]$ exit
+logout
+[yourlogin@host ~]$ ddb quick el9u
+```
+
+Aliases:
+  * `ddbq` = `ddb quick`
 
 
 ### `halt [ --all ] NAME [ NAME ... ]` - Stop and destroy a container

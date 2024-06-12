@@ -11,5 +11,6 @@ alias ddbb="ddb boot"
 alias ddbbl="ddb boot --login"
 alias ddbh="ddb halt"
 alias ddbl="ddb login"
+alias ddbq="ddb quick"
 EOF
 fi
