@@ -12,15 +12,20 @@ help()
 Usage: ${WHOAMI} [ OPTIONS ] CONTAINER-NAME IMAGE-NAME
 
 Options:
-  --login    Loginto the container after it has booted
+  --login    Log into the container after it has booted.  Implied
+               if $LOGIN_ON_BOOT is set to any non-empty value.
+  --no-login Don't log into the container after boot.  Overrides
+               $LOGIN_ON_BOOT if set.
   --verbose  Print the Docker command used to start the container
 
 Example:  ${WHOAMI} --login thing el9
 EOF
 }
 
+[ "${DDB_LOGIN_ON_BOOT}" ] \
+    && LOGIN_AFTER=true \
+	|| LOGIN_AFTER=false
 
-LOGIN_AFTER=false
 VERBOSE=false
 while echo "$1" | egrep -qe '^--'
 do
@@ -32,6 +37,11 @@ do
 	
 	--login)
 	    LOGIN_AFTER=true
+	    shift
+	    ;;
+
+	--no-login)
+	    LOGIN_AFTER=false
 	    shift
 	    ;;
 
@@ -119,5 +129,6 @@ do_docker $DOCKER run \
 
 if ${LOGIN_AFTER}
 then
+    echo "Logging into ${NAME}"
     exec "${WHEREAMI}/login" "${NAME}"
 fi
