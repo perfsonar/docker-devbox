@@ -57,12 +57,12 @@ To add convenience aliases (described below):
 # Set up Docker DevBox
 you@host$ eval $(/opt/docker-devbox/setup --aliases)
 
-# Build a customized-for-you image of EL7 plus Unibuild
-you@host$ ddb build el7u
+# Build a customized-for-you image of EL9 plus Unibuild
+you@host$ ddb build el9u
 
 # Start that image in a container
-you@host$ ddb boot tester el7u
-Starting tester as el7u
+you@host$ ddb boot tester el9u
+Starting tester as el9u
 f245ebc74207b5485a80602e4b676bd98443cdba2bb11cb8310ac7331eba555a
 
 # Log into the container and do your business
