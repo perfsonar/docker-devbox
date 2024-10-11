@@ -12,9 +12,15 @@ consistent user experience.
 DDB is intended for use in expendable development systems.  **It is
 not for use in production.**
 
-Because DDB depends on a user's ability to become the superuser,
-containers being run by one user are accessible to any other user with
-the same rights.  The separation between users provided is for
+DDB will run Docker as the invoking user if that user is the superuser
+or is in the `docker` group.  Otherwise, it will attempt to escalate
+to the superuser using `sudo(8)`.  If you have containers and images
+built as the superuser with older versions of DDB, it can be forced
+into the old behavior by setting the environment variable
+`DDB_FORCE_ROOT` to any non-empty value.
+
+Containers being run as the superuser are accessible to any other user
+with the same rights.  The separation between users provided is for
 convenience, not security.
 
 
@@ -259,6 +265,13 @@ Powering off.
 
 Aliases:
   * `ddbh` = `ddb halt`
+
+
+### `drain` - Remove all DDB images and containers
+
+This command will remove all DDB-created images and containers and
+will prune all dangling Docker resources if the `--prune` switch is
+present.  Note that pruning may remove non-DDB resources.
 
 
 ## Everything Else

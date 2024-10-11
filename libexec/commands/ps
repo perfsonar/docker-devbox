@@ -7,4 +7,4 @@
 . "$(dirname $0)/../common"
 
 $DOCKER container list  --format "{{.Names}}\n" --all --filter "name=^${DDB_CONTAINER_PREFIX}" \
-	| sed -e "s/^${DDB_CONTAINER_PREFIX}//"
+	| sed -e "s/^${DDB_CONTAINER_PREFIX}//; /^\$/d"
