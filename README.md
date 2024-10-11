@@ -267,6 +267,13 @@ Aliases:
   * `ddbh` = `ddb halt`
 
 
+### `drain` - Remove all DDB images and containers
+
+This command will remove all DDB-created images and containers and
+will prune all dangling Docker resources if the `--prune` switch is
+present.  Note that pruning may remove non-DDB resources.
+
+
 ## Everything Else
 
 Some of the ideas for docker-devbox came from Akihiro Suda's
