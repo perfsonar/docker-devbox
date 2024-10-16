@@ -5,6 +5,7 @@
 WHOAMI=$(basename $0)
 WHEREAMI=$(dirname $0)
 
+
 warn()
 {
     [ "$@" ] && echo "$@" 1>&2
@@ -93,6 +94,10 @@ getent_passwd()
 
     esac
 }
+
+# Information about the invoking user
+USER_ENT=$(getent_passwd $(id -nu))
+USER_HOME=$(echo "${USER_ENT}" | cut -d : -f 6)
 
 
 #

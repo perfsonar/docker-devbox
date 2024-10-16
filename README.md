@@ -23,6 +23,11 @@ Containers being run as the superuser are accessible to any other user
 with the same rights.  The separation between users provided is for
 convenience, not security.
 
+The host's /tmp directory may be shared among the containers and its
+contents readable by processes in thaose conainers.  See the `boot`
+command for more information.
+
+
 
 ## Installation and Setup
 
@@ -165,6 +170,12 @@ colliding with useful words (e.g., `FOO` will become `__FOO`).
 
 Once an image has been built, it can be instantiated as a container by
 booting it.
+
+If the environment variable `DDB_SSH_AUTH` is a non-empty value
+and `SSH_AUTH_SOCK` is present in the environment, the host's `/tmp/`
+directory will be shared into the container to enable use of
+ssh-agent's socket.  **This will make the contents of the `/tmp`
+directory readable across containers.**
 
 Example:
 ```

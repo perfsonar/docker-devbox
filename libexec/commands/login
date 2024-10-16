@@ -39,13 +39,31 @@ do
 done
 
 
+CONTAINER_NAME="${DDB_CONTAINER_PREFIX}$1"
+
+# If there's a SSH_AUTH_SOCK and it's in one of the directories we
+# share into the container, export it.
+
+if [ -n "${SSH_AUTH_SOCK}" ]
+then
+    for DIR in /tmp /run "${USER_HOME}"
+    do
+	if echo "${SSH_AUTH_SOCK}" | egrep -q -e "^${DIR}"
+	then
+	    EXEC_ENV_ARGS="--env 'SSH_AUTH_SOCK=${SSH_AUTH_SOCK}'"
+	    SU_ENV_ARGS="-w SSH_AUTH_SOCK"
+	    break
+	fi
+    done
+fi
+
 if $ROOT
 then
     COMMAND=bash
 else
-    COMMAND="su - $(id -nu)"
+    COMMAND="su ${SU_ENV_ARGS} - $(id -nu)"
 fi
 
-CONTAINER_NAME="${DDB_CONTAINER_PREFIX}$1"
-
-exec $DOCKER exec -it "${CONTAINER_NAME}" ${COMMAND}
+echo docker exec -it --env 'SSH_AUTH_SOCK=/tmp/ssh-XXXXak7oKF/agent.49299' ddb__mfeit__foo su -w SSH_AUTH_SOCK - mfeit
+echo $DOCKER exec -it ${EXEC_ENV_ARGS} "${CONTAINER_NAME}" ${COMMAND}
+exec $DOCKER exec -it ${EXEC_ENV_ARGS} "${CONTAINER_NAME}" ${COMMAND}

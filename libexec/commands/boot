@@ -68,9 +68,6 @@ IMAGE_FULL="${DDB_CONTAINER_PREFIX}$2"
 # TODO: Make this work
 #${WHEREAMI}/build --if-new "${BASE}"
 
-USER_ENT=$(getent_passwd $(id -nu))
-USER_HOME=$(echo "${USER_ENT}" | cut -d : -f 6)
-
 echo "Starting ${NAME} from image ${IMAGE}"
 
 # Notes:
@@ -113,13 +110,20 @@ case $(uname -s) in
     ;;
 esac
 
+if [ "${DDB_SSH_AUTH}" -a -S "${SSH_AUTH_SOCK}" ]
+then
+    TMP_VOLUME="--volume /tmp:/tmp"
+else
+    TMP_VOLUME="--tmpfs /tmp"
+fi
+
 do_docker $DOCKER run \
     --hostname "${NAME}" \
     --name "${CONTAINER_NAME}" \
     --detach \
     --rm \
     ${PRIVILEGED} \
-    --tmpfs /tmp \
+    ${TMP_VOLUME} \
     --tmpfs /run \
     ${VOLUME_CGROUP} \
     --volume "${USER_HOME}:${USER_HOME}" \
