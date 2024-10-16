@@ -119,8 +119,6 @@ do_docker $DOCKER run \
     --detach \
     --rm \
     ${PRIVILEGED} \
-    --tmpfs /tmp \
-    --tmpfs /run \
     ${VOLUME_CGROUP} \
     --volume "${USER_HOME}:${USER_HOME}" \
     --security-opt label:disable \
