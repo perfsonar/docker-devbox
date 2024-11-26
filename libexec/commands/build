@@ -20,12 +20,12 @@ add_extra_macro()
 {
     MACRO=$(echo "$1" | sed -e 's/=.*$//')
     VALUE=$(echo "$1" | sed -e 's/^[^=]\+=//')
-    echo "${MACRO}" | egrep -q -e '^[A-Za-z0-9_]+$' \
+    echo "${MACRO}" | grep -E -q -e '^[A-Za-z0-9_]+$' \
 	|| die "${MACRO}: Invalid macro name."
     echo "export 'MACRO_${MACRO}=${VALUE}'" >> "${EXTRA_MACROS}"
 }
 
-while echo "$1" | egrep -qe '^--'
+while echo "$1" | grep -E -qe '^--'
 do
     case "$1" in
 	--help)

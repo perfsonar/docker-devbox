@@ -15,7 +15,7 @@ EOF
 }
 
 
-while echo "$1" | egrep -qe '^--'
+while echo "$1" | grep -E -qe '^--'
 do
     case "$1" in
 	--help)
@@ -45,7 +45,7 @@ do
     [ "${TRIES}" -ge 10 ] && die "Unable to find a unique container name."
 
     CANDIDATE=$(mktemp --dry-run "${IMAGE}-XXXXXXXX")
-    if ! "${WHEREAMI}/ps" | fgrep -qx "${CANDIDATE}"
+    if ! "${WHEREAMI}/ps" | grep -F -qx "${CANDIDATE}"
     then
 	CONTAINER="${CANDIDATE}"
 	break
@@ -56,7 +56,7 @@ done
 quick_cleanup()
 {
     ddb_cleanup
-    if "${WHEREAMI}/ps" | fgrep -qx "${CONTAINER}"
+    if "${WHEREAMI}/ps" | grep -F -qx "${CONTAINER}"
     then
 	"${WHEREAMI}/halt" "${CONTAINER}"
     fi

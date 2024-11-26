@@ -30,7 +30,7 @@ fi
 
 PRUNE=false
 
-while echo "$1" | egrep -qe '^--'
+while echo "$1" | grep -E -qe '^--'
 do
     case "$1" in
 	--help)

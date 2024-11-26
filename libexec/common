@@ -46,7 +46,7 @@ TMPBASE=$(mktemp -d)
 
 if [ "$(id -u)" -eq 0 \
 		-o "$(uname -s)" = 'Darwin' \
-		-o "$(id -Gn | tr ' ' '\n' | fgrep -x docker | wc -l)" -eq 1 \
+		-o "$(id -Gn | tr ' ' '\n' | grep -F -x docker | wc -l)" -eq 1 \
 		-a -z "${DDB_FORCE_ROOT}" \
    ]
 then
