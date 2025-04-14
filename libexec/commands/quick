@@ -1,0 +1,68 @@
+#!/bin/sh -e
+#
+# Run a temporary container and destroy it when it exits
+#
+
+. "$(dirname $0)/../common"
+
+help()
+{
+    cat <<EOF
+Usage: ${WHOAMI} IMAGE-NAME
+
+Example:  ${WHOAMI} el9u
+EOF
+}
+
+
+while echo "$1" | grep -E -qe '^--'
+do
+    case "$1" in
+	--help)
+	    help
+	    exit 0
+	    ;;
+	*)
+	    echo "Unknown option $1" 1>&2
+	    exit 1
+    esac
+done
+
+if [ $# -ne 1 ]
+then
+    help
+    exit 1
+fi
+IMAGE=$1
+
+# Find a unique container name
+
+TRIES=0
+CONTAINER=
+while [ -z "${CONTAINER}" ]
+do
+    TRIES=$((${TRIES} + 1))
+    [ "${TRIES}" -ge 10 ] && die "Unable to find a unique container name."
+
+    CANDIDATE=$(mktemp --dry-run "${IMAGE}-XXXXXXXX")
+    if ! "${WHEREAMI}/ps" | grep -F -qx "${CANDIDATE}"
+    then
+	CONTAINER="${CANDIDATE}"
+	break
+    fi
+done
+
+
+quick_cleanup()
+{
+    ddb_cleanup
+    if "${WHEREAMI}/ps" | grep -F -qx "${CONTAINER}"
+    then
+	"${WHEREAMI}/halt" "${CONTAINER}"
+    fi
+}
+trap quick_cleanup EXIT
+
+
+"${WHEREAMI}/boot" --login "${CONTAINER}" "${IMAGE}"
+# When this exits, quick_cleanup will get rid of the container.

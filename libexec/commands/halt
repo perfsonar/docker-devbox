@@ -20,7 +20,7 @@ EOF
 
 
 STOP_ALL=false
-while echo "$1" | egrep -qe '^--'
+while echo "$1" | grep -E -qe '^--'
 do
     case "$1" in
 	--help)
@@ -70,12 +70,17 @@ do
     then
 	printf  "Stopping ${NAME}..."
     fi
+
     # TODO: Make sure the container exists
-    $DOCKER exec -it "${CONTAINER}" "${DDB_DIR}/stop"
+    if ! $DOCKER exec -it "${CONTAINER}" "${DDB_DIR}/stop"
+    then
+	echo "${NAME} did not stop; removing it forcibly."
+	$DOCKER rm -f --ignore --volumes --time 0 "${CONTAINER}"
+    fi
+
     if ${STOP_ALL}
     then
 	echo " Done."
     fi
-
 
 done

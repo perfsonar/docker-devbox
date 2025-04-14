@@ -12,9 +12,15 @@ consistent user experience.
 DDB is intended for use in expendable development systems.  **It is
 not for use in production.**
 
-Because DDB depends on a user's ability to become the superuser,
-containers being run by one user are accessible to any other user with
-the same rights.  The separation between users provided is for
+DDB will run Docker as the invoking user if that user is the superuser
+or is in the `docker` group.  Otherwise, it will attempt to escalate
+to the superuser using `sudo(8)`.  If you have containers and images
+built as the superuser with older versions of DDB, it can be forced
+into the old behavior by setting the environment variable
+`DDB_FORCE_ROOT` to any non-empty value.
+
+Containers being run as the superuser are accessible to any other user
+with the same rights.  The separation between users provided is for
 convenience, not security.
 
 
@@ -57,12 +63,12 @@ To add convenience aliases (described below):
 # Set up Docker DevBox
 you@host$ eval $(/opt/docker-devbox/setup --aliases)
 
-# Build a customized-for-you image of EL7 plus Unibuild
-you@host$ ddb build el7u
+# Build a customized-for-you image of EL9 plus Unibuild
+you@host$ ddb build el9u
 
 # Start that image in a container
-you@host$ ddb boot tester el7u
-Starting tester as el7u
+you@host$ ddb boot tester el9u
+Starting tester as el9u
 f245ebc74207b5485a80602e4b676bd98443cdba2bb11cb8310ac7331eba555a
 
 # Log into the container and do your business
@@ -217,6 +223,28 @@ issue-1234
 ```
 
 
+### `quick IMAGE` - Run an itinerant container
+
+This command boots a container based on `IMAGE`, logs into it and then
+destroys it once the login session has exited.
+
+Example:
+```
+[yourlogin@host ~]$ ddb ps
+(No output)
+[yourlogin@host ~]$ ddb quick el9u
+Starting quick-GQTXmh6T from image el9u
+b6067fd9d973c17b83c1ced2a8519d6ea40140eb15a438145c35be46f9707fc1
+[yourlogin@quick-GQTXmh6T]$
+[yourlogin@quick-GQTXmh6T]$ exit
+logout
+[yourlogin@host ~]$ ddb ps
+(No output)
+[yourlogin@host ~]$
+```
+
+Aliases:
+  * `ddbq` = `ddb quick`
 
 
 ### `halt [ --all ] NAME [ NAME ... ]` - Stop and destroy a container
@@ -237,6 +265,13 @@ Powering off.
 
 Aliases:
   * `ddbh` = `ddb halt`
+
+
+### `drain` - Remove all DDB images and containers
+
+This command will remove all DDB-created images and containers and
+will prune all dangling Docker resources if the `--prune` switch is
+present.  Note that pruning may remove non-DDB resources.
 
 
 ## Everything Else

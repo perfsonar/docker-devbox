@@ -16,38 +16,33 @@ default	almalinux:9
 
 # Generic Red Hat
 
-centos	centos:7
-el7	centos:7
-el8	almalinux:8
 ol8	oraclelinux:8
 el9	almalinux:9
+el10b	almalinux:10-kitten
 
 # Generic Debian
 
-d10	debian:10
 d11	debian:11
 d12	debian:12
-u18	ubuntu:18.04
 u20	ubuntu:20.04
 u22	ubuntu:22.04
+u24	ubuntu:24.04
 
 # perfSONAR basic images with Unibuild pre-installed
 
-el7u	ghcr.io/perfsonar/unibuild/el7:latest
-el8u	ghcr.io/perfsonar/unibuild/el8:latest
 ol8u	ghcr.io/perfsonar/unibuild/ol8:latest
 el9u	ghcr.io/perfsonar/unibuild/el9:latest
-d10u	ghcr.io/perfsonar/unibuild/d10:latest
+el10bu	ghcr.io/perfsonar/unibuild/el10b:latest
 d11u	ghcr.io/perfsonar/unibuild/d11:latest
 d12u	ghcr.io/perfsonar/unibuild/d12:latest
-u18u	ghcr.io/perfsonar/unibuild/u18:latest
 u20u	ghcr.io/perfsonar/unibuild/u20:latest
 u22u	ghcr.io/perfsonar/unibuild/u22:latest
-# Some foreign architecture images, they need to have full sha256 identifier
-u20uarm64 ghcr.io/perfsonar/unibuild/u20:latest@sha256:133c971b61856ae36d98573c583e8bc3f2ab6f7d4cd5e9d9d40582e5b8d10bed
-u20uarmhf ghcr.io/perfsonar/unibuild/u20:latest@sha256:8a50900de792a0ed9f1f56c33f66fcbd654daedd09b4cbd6b7462069e8854ccb
-u20uppc64 ghcr.io/perfsonar/unibuild/u20:latest@sha256:3fc81962025cda5b1096cc422bc5d08005d1fc276e6a6cecd873cfdb4f93a376
-d11uarm64 ghcr.io/perfsonar/unibuild/d11:latest@sha256:cfec0dfef4b1f2e661907889124a2209578f4907353318044ae6867668aad68e
-d11uarmhf ghcr.io/perfsonar/unibuild/d11:latest@sha256:659d5d9b66c46e785ae6485f8096965d1b20322dccc4612ddaa30ee14d35541c
-d11uppc64 ghcr.io/perfsonar/unibuild/d11:latest@sha256:7011afa3ccc18a9c061fd5b25cb74010a35288d3372097e07acea9407a22a610
+u24u	ghcr.io/perfsonar/unibuild/u24:latest
 
+# ARM64 images
+# These need to be updated manually as the sha256 hash will change with every new Unibuild release
+d11uarm64   ghcr.io/perfsonar/unibuild/d11:latest@sha256:066e09023127a5970e79d021f82a4a4e8d22a6f06f546256f7645bda4f5fade2
+d12uarm64   ghcr.io/perfsonar/unibuild/d12:latest@sha256:dd69896d0f1a97cdcf1a6571b8a01100e86c859206f3e0ea55d67dfd3dbbcc46
+u20uarm64   ghcr.io/perfsonar/unibuild/u20:latest@sha256:8af119adb3c574b451e410bbed1b6f8e5c36b2e22fb679ec4c7a26f5da18ed76
+u22uarm64   ghcr.io/perfsonar/unibuild/u22:latest@sha256:77f035a0d20b968c13454e8e3666fd1f496e580b23ebd8bf6dd6d8283a1c359a
+u24uarm64   ghcr.io/perfsonar/unibuild/u24:latest@sha256:3349af45196d52f93100434b0e8e7f28c221fe2609d5b29fb76d95ed7eadb4c2

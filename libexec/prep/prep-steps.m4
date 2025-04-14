@@ -58,6 +58,7 @@ ifelse(__FAMILY,Debian,
 
 install_pkg \
     procps \
+    rsyslog \
     sudo
 
 

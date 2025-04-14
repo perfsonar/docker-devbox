@@ -3,7 +3,7 @@
 # Build an image
 #BEGIN-HELP
 #
-# Usage:  build [ OPTIONS ] NAME
+# Usage:  build [ OPTIONS ] NAME [ NAME ... ]
 #
 # Options:
 #    --define MACRO=VALUE  Define macro 'MACRO' as 'VALUE' for prep files
@@ -20,12 +20,12 @@ add_extra_macro()
 {
     MACRO=$(echo "$1" | sed -e 's/=.*$//')
     VALUE=$(echo "$1" | sed -e 's/^[^=]\+=//')
-    echo "${MACRO}" | egrep -q -e '^[A-Za-z0-9_]+$' \
+    echo "${MACRO}" | grep -E -q -e '^[A-Za-z0-9_]+$' \
 	|| die "${MACRO}: Invalid macro name."
     echo "export 'MACRO_${MACRO}=${VALUE}'" >> "${EXTRA_MACROS}"
 }
 
-while echo "$1" | egrep -qe '^--'
+while echo "$1" | grep -E -qe '^--'
 do
     case "$1" in
 	--help)
@@ -44,36 +44,37 @@ do
     esac
 done
 
-[ $# -ne 1 ] && self_help 1
+[ $# -lt 1 ] && self_help 1
 
-NAME="$1"
+for NAME in "$@"
+do
 
-BASE_IMAGE=$(get_by_key "${DDB_ETC}/bases" "${NAME}" | cut -d ' ' -f 1)
+    BASE_IMAGE=$(get_by_key "${DDB_ETC}/bases" "${NAME}" | cut -d ' ' -f 1)
 
-# Add any macros specified in the bases file
-get_by_key "${DDB_ETC}/bases" "${NAME}" \
-    | cut -d ' ' -s -f 2- \
-    | tr " "  "\n" \
-    | (
-    while read MACRO
-    do
-	add_extra_macro "${MACRO}"
-    done
-)
+    # Add any macros specified in the bases file
+    get_by_key "${DDB_ETC}/bases" "${NAME}" \
+	| cut -d ' ' -s -f 2- \
+	| tr " "  "\n" \
+	| (
+	while read MACRO
+	do
+	    add_extra_macro "${MACRO}"
+	done
+    )
 
-CONTAINER_NAME="${DDB_CONTAINER_PREFIX}${NAME}"
+    CONTAINER_NAME="${DDB_CONTAINER_PREFIX}${NAME}"
 
-cp -r "${DDB}/prep" "${TMPBASE}"
+    cp -r "${DDB}/prep" "${TMPBASE}"
 
-USER_PREP="${HOME}/.ddb/prep.m4"
-if [ -r "${USER_PREP}" ]
-then
-    cp "${USER_PREP}" "${TMPBASE}/prep/prep-steps-user.m4"
-fi 
+    USER_PREP="${HOME}/.ddb/prep.m4"
+    if [ -r "${USER_PREP}" ]
+    then
+	cp "${USER_PREP}" "${TMPBASE}/prep/prep-steps-user.m4"
+    fi
 
-DOCKERFILE="${TMPBASE}/Dockerfile"
+    DOCKERFILE="${TMPBASE}/Dockerfile"
 
-cat > "${DOCKERFILE}" <<EOF
+    cat > "${DOCKERFILE}" <<EOF
 FROM ${BASE_IMAGE}
 RUN mkdir -p "${DDB_DIR}"
 COPY prep "${DDB_DIR}"
@@ -82,5 +83,7 @@ RUN "${DDB_DIR}/prep"
 RUN echo "${CONTAINER_NAME}" > "${CONTAINER_NAME}"
 EOF
 
-cd "${TMPBASE}"
-$DOCKER buildx build --pull -t "${CONTAINER_NAME}" -f "${DOCKERFILE}" .
+    cd "${TMPBASE}"
+    $DOCKER buildx build --pull -t "${CONTAINER_NAME}" -f "${DOCKERFILE}" .
+
+done

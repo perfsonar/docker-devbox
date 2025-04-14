@@ -1,0 +1,110 @@
+#!/bin/sh -e
+#
+# Remove all DDB containers and images and optionally prune
+#
+#BEGIN-HELP
+#
+# Usage:  drain [ OPTIONS ]
+#
+# Options:
+#    --prune     Do a docker system prune at the end
+#    --help      This help
+#
+#END-HELP
+#
+
+
+. "$(dirname $0)/../common"
+
+CONTAINER_LIST="${TMPBASE}/containers"
+${WHEREAMI}/ps > "${CONTAINER_LIST}"
+
+IMAGE_LIST="${TMPBASE}/images"
+${WHEREAMI}/images > "${IMAGE_LIST}"
+
+if [ ! -s "${CONTAINER_LIST}" -a ! -s "${IMAGE_LIST}" ]
+then
+    echo "Nothing to remove."
+    exit 0
+fi
+
+PRUNE=false
+
+while echo "$1" | grep -E -qe '^--'
+do
+    case "$1" in
+	--help)
+	    self_help
+	    ;;
+	
+	--prune)
+	    PRUNE=true
+	    shift
+	    ;;
+
+	*)
+	    echo "Unknown option $1" 1>&2
+	    exit 1
+    esac
+done
+
+[ $# -eq 0 ] || self_help 1
+
+
+#
+# Main Program
+#
+    
+if [ -t 0 ]
+then
+    if [ -s "${CONTAINER_LIST}" ]
+    then
+	echo
+	echo "The following containers will be removed:"
+	sed -e "s/^/    /" "${CONTAINER_LIST}"
+    fi
+
+    if [ -s "${IMAGE_LIST}" ]
+    then
+	echo
+	echo "The following images will be removed:"
+	sed -e "s/^/    /" "${IMAGE_LIST}"
+    fi
+
+    if ${PRUNE}
+    then
+	echo
+	echo "All dangling resources (even those not DDB-related) will be pruned."
+    fi	
+
+    echo
+    echo "Press Enter to continue or ^C to abort."
+    read
+fi
+
+
+if [ -s "${CONTAINER_LIST}" ]
+then
+    echo
+    echo Removing containers:
+    sed -e "s/^/${DDB_CONTAINER_PREFIX}/" "${CONTAINER_LIST}" \
+	| xargs ${DOCKER} rm -f
+fi
+
+if [ -s "${IMAGE_LIST}" ]
+then
+    echo
+    echo Removing images:
+    sed -e "s/^/${DDB_CONTAINER_PREFIX}/" "${IMAGE_LIST}" \
+	| xargs ${DOCKER} image rm -f
+fi
+
+
+if ${PRUNE}
+then
+    echo
+    echo Pruning:
+    ${DOCKER} system prune -f
+fi
+
+exit 0

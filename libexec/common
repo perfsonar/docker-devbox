@@ -38,12 +38,21 @@ export DDB_COMMANDS="${DDB}/commands"
 
 TMPBASE=$(mktemp -d)
 
+# Run docker without root if:
+#  - The user is root
+#  - The user is on macOS (TODO: This may not be necessary)
+#  - The user is in the docker group
+#  - DDB_FORCE_ROOT isn't set
 
-if [ "$(id -u)" = 0 -o "$(uname -s)" = "Darwin" ]
+if [ "$(id -u)" -eq 0 \
+		-o "$(uname -s)" = 'Darwin' \
+		-o "$(id -Gn | tr ' ' '\n' | grep -F -x docker | wc -l)" -eq 1 \
+		-a -z "${DDB_FORCE_ROOT}" \
+   ]
 then
-    DOCKER="docker"
+    DOCKER=docker
 else
-    DOCKER="sudo docker"
+    DOCKER='sudo docker'
 fi
 
     
