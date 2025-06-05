@@ -114,10 +114,7 @@ case $(uname -s) in
 esac
 
 # Get image platform architecture
-PLATFORM=$(do_docker $DOCKER image inspect \
-    "${IMAGE_FULL}" \
-    | awk -F \" '/Architecture/ {print $4}' \
-)
+PLATFORM=$(get_platform "${IMAGE_FULL}")
 
 do_docker $DOCKER run \
     --hostname "${NAME}" \
