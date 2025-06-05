@@ -55,6 +55,13 @@ else
     DOCKER='sudo docker'
 fi
 
+# Get Docker platform from image
+get_platform()
+{
+    PLATFORM=$($DOCKER image inspect "$1" \
+    | awk -F \" '/Architecture/ {print $4}')
+    echo $PLATFORM
+}
     
 # Strip comments and blanks out of key/value file $1 and find the
 # value out of columns 2+.

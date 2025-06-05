@@ -113,6 +113,9 @@ case $(uname -s) in
     ;;
 esac
 
+# Get image platform architecture
+PLATFORM=$(get_platform "${IMAGE_FULL}")
+
 do_docker $DOCKER run \
     --hostname "${NAME}" \
     --name "${CONTAINER_NAME}" \
@@ -122,11 +125,14 @@ do_docker $DOCKER run \
     ${VOLUME_CGROUP} \
     --volume "${USER_HOME}:${USER_HOME}" \
     --security-opt label:disable \
-    "${IMAGE_FULL}:latest" \
+    --platform "linux/${PLATFORM}" \
+    "${IMAGE_FULL}" \
     bash /ddb-entrypoint --user-ent "${USER_ENT}"
 
 if ${LOGIN_AFTER}
 then
+    # Wait a bit for the container to boot properly
+    sleep 2
     echo "Logging into ${NAME}"
     exec "${WHEREAMI}/login" "${NAME}"
 fi
