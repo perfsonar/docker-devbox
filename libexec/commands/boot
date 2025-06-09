@@ -18,7 +18,7 @@ Options:
                        $LOGIN_ON_BOOT if set.
   --publish P1[:P2]  Publish the container's port P2 on the host's port P1
                        or P1 for both if P2 is not provided.  (Same syntax
-                       as used by Docker.)
+                       as used by Docker.)  May be used multiple times.
   --verbose          Print the Docker command used to start the container
 
 Example:  ${WHOAMI} --login thing el9
