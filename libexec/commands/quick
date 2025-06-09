@@ -8,7 +8,9 @@
 help()
 {
     cat <<EOF
-Usage: ${WHOAMI} IMAGE-NAME
+Usage: ${WHOAMI} IMAGE-NAME [ BOOT-OPTS ]
+
+BOOT-OPTS is any options that can be passed to the 'ddb boot' command.
 
 Example:  ${WHOAMI} el9u
 EOF
@@ -28,12 +30,14 @@ do
     esac
 done
 
-if [ $# -ne 1 ]
+if [ $# -lt 1 ]
 then
     help
     exit 1
 fi
+
 IMAGE=$1
+shift
 
 # Find a unique container name
 
@@ -64,5 +68,5 @@ quick_cleanup()
 trap quick_cleanup EXIT
 
 
-"${WHEREAMI}/boot" --login "${CONTAINER}" "${IMAGE}"
+"${WHEREAMI}/boot" --login "$@" "${CONTAINER}" "${IMAGE}"
 # When this exits, quick_cleanup will get rid of the container.
