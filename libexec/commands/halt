@@ -76,7 +76,7 @@ do
     then
 	echo "${NAME} did not stop; removing it forcibly."
 	# This is best-effort.
-	$DOCKER rm -f --volumes --time 0 "${CONTAINER}" || true
+	$DOCKER rm -f --volumes "${CONTAINER}" || true
     fi
 
     if ${STOP_ALL}
