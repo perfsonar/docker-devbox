@@ -131,8 +131,6 @@ do_docker $DOCKER run \
 
 if ${LOGIN_AFTER}
 then
-    # Wait a bit for the container to boot properly
-    sleep 2
     echo "Logging into ${NAME}"
     exec "${WHEREAMI}/login" "${NAME}"
 fi
