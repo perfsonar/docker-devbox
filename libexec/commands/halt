@@ -75,7 +75,8 @@ do
     if ! $DOCKER exec -it "${CONTAINER}" "${DDB_DIR}/stop"
     then
 	echo "${NAME} did not stop; removing it forcibly."
-	$DOCKER rm -f --ignore --volumes --time 0 "${CONTAINER}"
+	# This is best-effort.
+	$DOCKER rm -f --volumes "${CONTAINER}" || true
     fi
 
     if ${STOP_ALL}
