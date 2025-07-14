@@ -95,7 +95,8 @@ IMAGE_FULL="${DDB_CONTAINER_PREFIX}$2"
 # TODO: Make this work
 #${WHEREAMI}/build --if-new "${BASE}"
 
-USER_ENT=$(getent_passwd $(id -nu))
+ACCOUNT="$(id -nu)"
+USER_ENT=$(getent_passwd "${ACCOUNT}")
 USER_HOME=$(echo "${USER_ENT}" | cut -d : -f 6)
 
 echo "Starting ${NAME} from image ${IMAGE}"
@@ -152,6 +153,25 @@ do_docker $DOCKER run \
     --security-opt label:disable \
     "${IMAGE_FULL}:latest" \
     bash /ddb-entrypoint --user-ent "${USER_ENT}"
+
+
+# Wait for the entry point to creqate the user's account
+
+TRY_INTERVAL=0.25
+MAX_TRIES=60
+TRIES=0
+while ! docker exec -it "${CONTAINER_NAME}" getent passwd "${ACCOUNT}" > /dev/null
+do
+    [ "${TRIES}" -gt "${MAX_TRIES}" ] \
+	&& die "Container never established user account '${ACCOUNT}'"
+
+    TRIES=$(($TRIES + 1 ))
+
+    sleep "${TRY_INTERVAL}"
+done
+
+
+# Log in
 
 if ${LOGIN_AFTER}
 then

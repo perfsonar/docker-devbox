@@ -31,13 +31,13 @@ do
 	    ROOT=true
 	    shift
 	    ;;
-	
 	*)
 	    echo "Unknown option $1" 1>&2
 	    exit 1
     esac
 done
 
+CONTAINER_NAME="${DDB_CONTAINER_PREFIX}$1"
 
 if $ROOT
 then
@@ -45,7 +45,5 @@ then
 else
     COMMAND="su - $(id -nu)"
 fi
-
-CONTAINER_NAME="${DDB_CONTAINER_PREFIX}$1"
 
 exec $DOCKER exec -it "${CONTAINER_NAME}" ${COMMAND}
