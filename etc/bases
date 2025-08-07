@@ -41,8 +41,16 @@ u24u	ghcr.io/perfsonar/unibuild/u24:latest
 
 # ARM64 images
 # These need to be updated manually as the sha256 hash will change with every new Unibuild release
+
+arm64d11    arm64v8/debian:11
+arm64d12    arm64v8/debian:12
+arm64u20    arm64v8/ubuntu:20.04
+arm64u22	arm64v8/ubuntu:22.04
+arm64u24	arm64v8/ubuntu:24.04
 d11uarm64   ghcr.io/perfsonar/unibuild/d11:latest@sha256:066e09023127a5970e79d021f82a4a4e8d22a6f06f546256f7645bda4f5fade2
 d12uarm64   ghcr.io/perfsonar/unibuild/d12:latest@sha256:dd69896d0f1a97cdcf1a6571b8a01100e86c859206f3e0ea55d67dfd3dbbcc46
 u20uarm64   ghcr.io/perfsonar/unibuild/u20:latest@sha256:8af119adb3c574b451e410bbed1b6f8e5c36b2e22fb679ec4c7a26f5da18ed76
 u22uarm64   ghcr.io/perfsonar/unibuild/u22:latest@sha256:77f035a0d20b968c13454e8e3666fd1f496e580b23ebd8bf6dd6d8283a1c359a
 u24uarm64   ghcr.io/perfsonar/unibuild/u24:latest@sha256:3349af45196d52f93100434b0e8e7f28c221fe2609d5b29fb76d95ed7eadb4c2
+u20uppc64   ghcr.io/perfsonar/unibuild/u20:latest@sha256:aa3a8b90143e0736d4ada89941e8dff6f28e4d20e1f498d93ce9c1e7e21e20f3
+d11uppc64   ghcr.io/perfsonar/unibuild/u20:latest@sha256:e230b045a8ebbc77d1c953f4fea8e2898fafd536f58c30b2445afe65f8793e5c
