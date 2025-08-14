@@ -82,6 +82,11 @@ do
     PORTOPTS="${PORTOPTS} -p ${PORTSPEC}"
 done < "${PORTLIST}"
 
+if [ $# -ne 2 ]
+then
+    help 1>&2
+    exit 1
+fi
 
 NAME="$1"
 CONTAINER_NAME="${DDB_CONTAINER_PREFIX}${NAME}"
