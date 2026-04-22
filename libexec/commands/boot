@@ -131,6 +131,12 @@ case $(uname -s) in
 	PRIVILEGED=--privileged
 	;;
     Linux)
+	if [ "$OSINFO_DISTRO" == "ol" ] && [ "$OSINFO_MAJOR" -le "8" ]
+	then
+		cgroup_mount_perm="rw"
+	else
+		cgroup_mount_perm="ro"
+	fi
 	if [ -e /sys/fs/cgroup/cgroup.controllers ]
 	then
 	    # CGROUPS v2
@@ -138,7 +144,7 @@ case $(uname -s) in
 	else
 	    # CGROUPS v1
 	    PRIVILEGED=--privileged
-	    VOLUME_CGROUP="--volume /sys/fs/cgroup:/sys/fs/cgroup:rw"
+	    VOLUME_CGROUP="--volume /sys/fs/cgroup:/sys/fs/cgroup:$cgroup_mount_perm"
 	fi
 	;;
     *)
