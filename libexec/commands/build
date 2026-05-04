@@ -62,6 +62,8 @@ do
 	done
     )
 
+    $DOCKER pull "$BASE_IMAGE"
+    CONTAINER_PLATFORM=$(get_platform "$BASE_IMAGE")
     CONTAINER_NAME="${DDB_CONTAINER_PREFIX}${NAME}"
 
     cp -r "${DDB}/prep" "${TMPBASE}"
@@ -84,6 +86,6 @@ RUN echo "${CONTAINER_NAME}" > "${CONTAINER_NAME}"
 EOF
 
     cd "${TMPBASE}"
-    $DOCKER build --pull -t "${CONTAINER_NAME}" -f "${DOCKERFILE}" .
+    $DOCKER buildx build --platform "linux/${CONTAINER_PLATFORM}" --pull -t "${CONTAINER_NAME}" -f "${DOCKERFILE}" .
 
 done
